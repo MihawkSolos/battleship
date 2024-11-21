@@ -18,4 +18,33 @@ header {
     border-radius: 25px;
 }
 
+.content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 60px;
+    gap: 80px;
+}
+
+.computerBoard, .playerBoard {
+    display: grid;
+    grid-template-columns: repeat(10, 30px);
+    grid-template-rows: repeat(10, 30px);
+    gap: 0;
+}
+
+.board {
+    background: #fff;
+    border: 1px solid rgb(100, 100, 247);
+    height: 30px;
+    width: 30px;
+}
+
+.shipCell {
+    background: rgb(138, 138, 218);
+}
+
+.hitCell {
+    background: rgb(163, 97, 97);
+}
 

@@ -4,7 +4,7 @@ class Gameboard{
     constructor(){
         this.grid = {}; // will store coordinates and ther state in an object
         this.missedShots = [];
-        this.ships = []; // will trach the ships placed on the board 
+        this.ships = []; // will track the ships placed on the board 
     }
 
     initializeGrid(){
