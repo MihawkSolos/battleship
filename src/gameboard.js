@@ -8,8 +8,8 @@ class Gameboard{
     }
 
     initializeGrid(){
-        for(let x = 0; x < 10; x++){
-            for(let y = 0; y < 10; y++){
+        for(let y = 0; y < 10; y++){
+            for(let x = 0; x < 10; x++){
                 this.grid[`${x},${y}`] = null; // sets all possible coordinates to null
             }
         }

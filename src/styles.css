@@ -40,7 +40,11 @@ header {
     width: 30px;
 }
 
-.shipCell {
+.computerBoard > .shipCell {
+    background: rgb(138, 138, 218);
+}
+
+.playerBoard > .shipCell {
     background: rgb(138, 138, 218);
 }
 
