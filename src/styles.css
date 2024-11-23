@@ -40,6 +40,10 @@ header {
     width: 30px;
 }
 
+.board:hover {
+    cursor: pointer;
+}
+
 .computerBoard > .shipCell {
     background: rgb(138, 138, 218);
 }
@@ -49,6 +53,12 @@ header {
 }
 
 .hitCell {
+    background: rgb(88, 88, 88);
+}
+
+.missCell {
     background: rgb(163, 97, 97);
 }
+
+
 

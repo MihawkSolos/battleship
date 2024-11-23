@@ -35,6 +35,7 @@ class Gameboard{
     receiveAttack(x, y) {
         const key = `${x},${y}`;
         const cell = this.grid[key];
+        console.log(key);
 
         if (cell === null) {
             this.missedShots.push(key); // Record missed shot
