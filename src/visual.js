@@ -11,28 +11,26 @@ let turn = 0; // 0 = computer, 1 = player, for random do Math.round(Math.random(
 export function createGrid(className) {
     const contentDiv = document.querySelector('.content');
 
-    // Check if the grid already exists
-    let grid = contentDiv.querySelector(`.${className}`);
-    if (!grid) {
-        grid = document.createElement('div');
-        grid.classList.add(className);
+    // Remove any existing grid with the same className
+    let existingGrid = contentDiv.querySelector(`.${className}`);
+    if (existingGrid) existingGrid.remove();
 
-        for (let y = 0; y < 10; y++) {
-            for (let x = 0; x < 10; x++) {
-                const div = document.createElement('div');
-                div.classList.add(`cell-${x}-${y}`, 'board');
-                grid.appendChild(div);
-            }
+    // Create a new grid
+    const grid = document.createElement('div');
+    grid.classList.add(className);
+
+    for (let y = 0; y < 10; y++) {
+        for (let x = 0; x < 10; x++) {
+            const div = document.createElement('div');
+            div.classList.add(`cell-${x}-${y}`, 'board');
+            grid.appendChild(div);
         }
-        contentDiv.appendChild(grid);
     }
 
+    contentDiv.appendChild(grid);
     return grid;
 }
 
-export function updateGrid(grid, gridElement){
-
-}
 
 // have to refactor to only show hit divs for ship
 export function showShips(grid, gridElement) {
@@ -68,6 +66,7 @@ export function showShips(grid, gridElement) {
 
 // add event listeners for each div in players board 
 // will call the functions to hit etc..
+let clickHandler = null;
 export function createListener(div){
     div.querySelectorAll('.board').forEach(child => {
         child.addEventListener('click', (event) => {
@@ -94,6 +93,7 @@ export function createListener(div){
                 turn--;
                 if(computer.gameboard.gameLost()){
                     alert('Player Wins');
+                    endGame();
                 };
             }
             else if (div.className === 'playerBoard' && turn === 0){ // computer turn 
@@ -111,57 +111,110 @@ export function createListener(div){
                 turn++;
                 if(player.gameboard.gameLost()){
                     alert('Computer Wins');
+                    endGame();
                 };
             }
         })
+        // Attach click handler for each board cell
+        child.addEventListener('click', clickHandler);
     })
 }
 
 
+function playGameHandler(){
+    console.log(player.gameboard.ships);
+    console.log(player.gameboard.grid);
+
+    console.log(computer.gameboard.ships);
+    console.log(computer.gameboard.grid);
+
+    // Computer ships
+    //const computerShip1 = new Ship(5);
+    //const computerShip2 = new Ship(4);
+    //const computerShip3 = new Ship(3);
+    //const computerShip4 = new Ship(3);
+    const computerShip5 = new Ship(2);
+
+    //computer.gameboard.placeShip(computerShip1, 0, 0, 'horizontal');
+    //computer.gameboard.placeShip(computerShip2, 0, 2, 'horizontal');
+    //computer.gameboard.placeShip(computerShip3, 0, 4, 'horizontal');
+    //computer.gameboard.placeShip(computerShip4, 0, 6, 'horizontal');
+    computer.gameboard.placeShip(computerShip5, 0, 8, 'horizontal');
+
+    // create computer grid and display ships
+    const computerBoard = createGrid('computerBoard');
+    showShips(computer.gameboard.grid, computerBoard);
+
+    const computerBoardDiv = document.querySelector('.computerBoard');
+    createListener(computerBoardDiv);
+
+    // Player ships
+    const playerShip1 = new Ship(5);
+    const playerShip2 = new Ship(4);
+    const playerShip3 = new Ship(3);
+    const playerShip4 = new Ship(3);
+    const playerShip5 = new Ship(2);
+
+    player.gameboard.placeShip(playerShip1, 1, 0, 'horizontal');
+    player.gameboard.placeShip(playerShip2, 0, 2, 'horizontal');
+    player.gameboard.placeShip(playerShip3, 5, 2, 'horizontal');
+    player.gameboard.placeShip(playerShip4, 2, 3, 'horizontal');
+    player.gameboard.placeShip(playerShip5, 5, 4, 'horizontal');
+
+
+    // create player grid and display ships
+    const playerBoard = createGrid('playerBoard');
+    showShips(player.gameboard.grid, playerBoard);
+
+    const playerBoardDiv = document.querySelector('.playerBoard'); // dont want player board event listeners
+    createListener(playerBoardDiv);
+}
+
 // play game btn listener 
 export function playGameBtn(){
     const playBtn = document.querySelector('.playGame');
-    playBtn.addEventListener('click', () => {
-
-        // Computer ships
-        const computerShip1 = new Ship(5);
-        const computerShip2 = new Ship(4);
-        const computerShip3 = new Ship(3);
-        const computerShip4 = new Ship(3);
-        const computerShip5 = new Ship(2);
-
-        computer.gameboard.placeShip(computerShip1, 0, 0, 'horizontal');
-        computer.gameboard.placeShip(computerShip2, 0, 2, 'horizontal');
-        computer.gameboard.placeShip(computerShip3, 0, 4, 'horizontal');
-        computer.gameboard.placeShip(computerShip4, 0, 6, 'horizontal');
-        computer.gameboard.placeShip(computerShip5, 0, 8, 'horizontal');
-
-        // create computer grid and display ships
-        const computerBoard = createGrid('computerBoard');
-        showShips(computer.gameboard.grid, computerBoard);
-
-        const computerBoardDiv = document.querySelector('.computerBoard');
-        createListener(computerBoardDiv);
-
-        // Player ships
-        const playerShip1 = new Ship(5);
-        const playerShip2 = new Ship(4);
-        const playerShip3 = new Ship(3);
-        const playerShip4 = new Ship(3);
-        const playerShip5 = new Ship(2);
-
-        player.gameboard.placeShip(playerShip1, 1, 0, 'horizontal');
-        player.gameboard.placeShip(playerShip2, 0, 2, 'horizontal');
-        player.gameboard.placeShip(playerShip3, 5, 2, 'horizontal');
-        player.gameboard.placeShip(playerShip4, 2, 3, 'horizontal');
-        player.gameboard.placeShip(playerShip5, 5, 4, 'horizontal');
+    playBtn.addEventListener('click', playGameHandler)
+}
 
 
-        // create player grid and display ships
-        const playerBoard = createGrid('playerBoard');
-        showShips(player.gameboard.grid, playerBoard);
+// remove game when game ends
+export function endGame(){
+    const computerBoardDiv = document.querySelector('.computerBoard');
+    const playerBoardDiv = document.querySelector('.playerBoard');
+    const playBtn = document.querySelector('.playGame');
 
-        const playerBoardDiv = document.querySelector('.playerBoard'); // dont want player board event listeners
-        createListener(playerBoardDiv);
-    })
+    playBtn.removeEventListener('click', playGameHandler);
+
+    computerBoardDiv.querySelectorAll('.board').forEach(child => {
+        const clickHandler = child.dataset.clickHandler;
+        child.removeEventListener('click', clickHandler); // Remove the listener
+        delete child.dataset.clickHandler; // Clean up
+    });
+
+    playerBoardDiv.querySelectorAll('.board').forEach(child => {
+        const clickHandler = child.dataset.clickHandler;
+        child.removeEventListener('click', clickHandler); // Remove the listener
+        delete child.dataset.clickHandler; // Clean up
+    });;
+
+    // Completely remove the grids
+    if (computerBoardDiv) computerBoardDiv.remove();
+    if (playerBoardDiv) playerBoardDiv.remove();
+
+    computer.gameboard.clearGrid();
+    player.gameboard.clearGrid();
+
+    player.gameboard.initializeGrid();
+    computer.gameboard.initializeGrid();
+
+    //console.log(player.gameboard.ships);
+
+    createGrid('playerBoard');
+    createGrid('computerBoard');
+
+    // Show the newly initialized grids
+    showShips(player.gameboard.grid, playerBoardDiv);
+    showShips(computer.gameboard.grid, computerBoardDiv);
+
+    playGameBtn();
 }

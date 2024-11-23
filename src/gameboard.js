@@ -15,6 +15,11 @@ class Gameboard{
         }
     }
 
+    clearGrid(){
+        this.grid = {};
+        this.ships = [];
+    }
+
     placeShip(ship, startX, startY, direction){
         const length = ship.length;
 
