@@ -92,7 +92,9 @@ export function createListener(div){
                 showShips(computer.gameboard.grid, div);
                 turn--;
                 if(computer.gameboard.gameLost()){
-                    alert('Player Wins');
+                    const message = document.querySelector('.message');
+                    message.textContent = 'Player Wins!!!';
+                    //alert('Player Wins');
                     endGame();
                 };
             }
@@ -110,7 +112,9 @@ export function createListener(div){
                 showShips(player.gameboard.grid, div);
                 turn++;
                 if(player.gameboard.gameLost()){
-                    alert('Computer Wins');
+                    const message = document.querySelector('.message');
+                    message.textContent = 'Computer Wins!!!';
+                    //alert('Computer Wins');
                     endGame();
                 };
             }
@@ -120,26 +124,44 @@ export function createListener(div){
     })
 }
 
+function randomizeShips(player, ship) {
+    let placed = false; // Flag to track successful placement
+
+    while (!placed) {
+        // Generate random coordinates and direction
+        const x = Math.floor(Math.random() * 10); // Random integer 0-9
+        const y = Math.floor(Math.random() * 10); // Random integer 0-9
+        let direction = Math.round(Math.random()) === 0 ? 'horizontal' : 'vertical';
+
+        try {
+            // Try placing the ship
+            player.gameboard.placeShip(ship, x, y, direction);
+            placed = true; // If successful, set the flag to true
+        } catch (error) {
+            // Placement failed, retry with new random values
+            console.log(`Failed to place ship at (${x}, ${y}) with direction ${direction}. Retrying...`);
+        }
+    }
+}
+
 
 function playGameHandler(){
-    console.log(player.gameboard.ships);
-    console.log(player.gameboard.grid);
+    //console.log(player.gameboard.ships);
+    //console.log(player.gameboard.grid);
 
-    console.log(computer.gameboard.ships);
-    console.log(computer.gameboard.grid);
+    //console.log(computer.gameboard.ships);
+    //console.log(computer.gameboard.grid);
 
     // Computer ships
-    //const computerShip1 = new Ship(5);
-    //const computerShip2 = new Ship(4);
-    //const computerShip3 = new Ship(3);
-    //const computerShip4 = new Ship(3);
-    const computerShip5 = new Ship(2);
+    const computerShips = [
+        new Ship(5),
+        new Ship(4),
+        new Ship(3),
+        new Ship(3),
+        new Ship(2),
+    ];
 
-    //computer.gameboard.placeShip(computerShip1, 0, 0, 'horizontal');
-    //computer.gameboard.placeShip(computerShip2, 0, 2, 'horizontal');
-    //computer.gameboard.placeShip(computerShip3, 0, 4, 'horizontal');
-    //computer.gameboard.placeShip(computerShip4, 0, 6, 'horizontal');
-    computer.gameboard.placeShip(computerShip5, 0, 8, 'horizontal');
+    computerShips.forEach(ship => randomizeShips(computer, ship));
 
     // create computer grid and display ships
     const computerBoard = createGrid('computerBoard');
@@ -149,18 +171,15 @@ function playGameHandler(){
     createListener(computerBoardDiv);
 
     // Player ships
-    const playerShip1 = new Ship(5);
-    const playerShip2 = new Ship(4);
-    const playerShip3 = new Ship(3);
-    const playerShip4 = new Ship(3);
-    const playerShip5 = new Ship(2);
+    const playerShips = [
+        new Ship(5),
+        new Ship(4),
+        new Ship(3),
+        new Ship(3),
+        new Ship(2),
+    ];
 
-    player.gameboard.placeShip(playerShip1, 1, 0, 'horizontal');
-    player.gameboard.placeShip(playerShip2, 0, 2, 'horizontal');
-    player.gameboard.placeShip(playerShip3, 5, 2, 'horizontal');
-    player.gameboard.placeShip(playerShip4, 2, 3, 'horizontal');
-    player.gameboard.placeShip(playerShip5, 5, 4, 'horizontal');
-
+    playerShips.forEach(ship => randomizeShips(player, ship));
 
     // create player grid and display ships
     const playerBoard = createGrid('playerBoard');
@@ -207,14 +226,14 @@ export function endGame(){
     player.gameboard.initializeGrid();
     computer.gameboard.initializeGrid();
 
-    //console.log(player.gameboard.ships);
-
     createGrid('playerBoard');
     createGrid('computerBoard');
 
     // Show the newly initialized grids
     showShips(player.gameboard.grid, playerBoardDiv);
     showShips(computer.gameboard.grid, computerBoardDiv);
+
+    //console.log(player.gameboard.ships);
 
     playGameBtn();
 }

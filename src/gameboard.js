@@ -20,21 +20,31 @@ class Gameboard{
         this.ships = [];
     }
 
-    placeShip(ship, startX, startY, direction){
+    placeShip(ship, startX, startY, direction) {
         const length = ship.length;
-
-        for(let i = 0; i < length; i++){
-            const x = direction === 'horizontal' ? startX + i: startX;
-            const y = direction === 'vertical' ? startY + i: startY;
-
-            // Ensure ship placement stays within bounds
+        const positions = [];
+    
+        for (let i = 0; i < length; i++) {
+            const x = direction === 'horizontal' ? startX + i : startX;
+            const y = direction === 'vertical' ? startY + i : startY;
+    
+            // Check boundaries
             if (x >= 10 || y >= 10 || this.grid[`${x},${y}`]) {
                 throw new Error('Invalid ship placement');
             }
-            this.grid[`${x},${y}`] = ship; // Assign the ship object to each cell
+    
+            // Save position to place ship after validation
+            positions.push({ x, y });
         }
-        this.ships.push(ship);
+    
+        // If all positions are valid, place the ship
+        positions.forEach(({ x, y }) => {
+            this.grid[`${x},${y}`] = ship; // Assign the ship to the cell
+        });
+    
+        this.ships.push(ship); // Add ship to the list
     }
+    
 
     // Handle an attack at given coordinates
     receiveAttack(x, y) {

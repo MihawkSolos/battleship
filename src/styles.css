@@ -49,7 +49,7 @@ header {
 }
 
 .playerBoard > .shipCell {
-    background: rgb(138, 138, 218);
+    background: rgb(255, 255, 255); /* make computer ships invis */
 }
 
 .hitCell {
@@ -58,6 +58,16 @@ header {
 
 .missCell {
     background: rgb(163, 97, 97);
+}
+
+.computerShip {
+    background: #996868;
+}
+
+.message {
+    padding-top: 26px;
+    font-size: 1.5em;
+    color: #fff;
 }
 
 
